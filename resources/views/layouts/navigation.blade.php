@@ -1,96 +1,169 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
+<nav x-data="{ open: false }" class="bg-white border-b border-gray-100 shadow-sm">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
-            <div class="flex">
+            <div class="flex items-center">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                    <a href="{{ route('dashboard') }}" class="flex items-center gap-3">
+                        <div class="h-10 w-10 rounded-full bg-[var(--primary)] text-white flex items-center justify-center shadow">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <span class="font-semibold text-lg text-[var(--primary)]">Bengkel Bass Motor</span>
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
+                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="text-gray-600 hover:text-[var(--primary)] transition">
+                        <i class="fas fa-tachometer-alt mr-2"></i>{{ __('Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link href="#services" class="text-gray-600 hover:text-[var(--primary)] transition">
+                        <i class="fas fa-cogs mr-2"></i>{{ __('Layanan') }}
+                    </x-nav-link>
+                    <x-nav-link href="#history" class="text-gray-600 hover:text-[var(--primary)] transition">
+                        <i class="fas fa-history mr-2"></i>{{ __('Riwayat') }}
+                    </x-nav-link>
+                    <x-nav-link href="#vehicles" class="text-gray-600 hover:text-[var(--primary)] transition">
+                        <i class="fas fa-motorcycle mr-2"></i>{{ __('Kendaraan') }}
                     </x-nav-link>
                 </div>
             </div>
 
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
+            <!-- Right Side Actions -->
+            <div class="flex items-center gap-4">
+                <!-- Quick Actions -->
+                <div class="hidden sm:flex items-center gap-3">
+                    <a href="{{ url('/') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-md border border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition text-sm">
+                        <i class="fas fa-home"></i> Beranda
+                    </a>
+                    <a href="https://wa.me/6281234567890" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] transition text-sm">
+                        <i class="fab fa-whatsapp"></i> Chat
+                    </a>
+                </div>
 
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
+                <!-- Settings Dropdown -->
+                <div class="hidden sm:flex sm:items-center sm:ms-6">
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:text-[var(--primary)] focus:outline-none transition ease-in-out duration-150">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-[var(--primary)] text-white flex items-center justify-center text-sm font-semibold">
+                                        {{ substr(Auth::user()->name, 0, 1) }}
+                                    </div>
+                                    <span>{{ Auth::user()->name }}</span>
+                                </div>
 
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
+                                <div class="ms-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
 
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('profile.edit')" class="flex items-center gap-2">
+                                <i class="fas fa-user-circle w-4 text-center"></i>
+                                {{ __('Profile') }}
                             </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
+                            
+                            <x-dropdown-link href="#settings" class="flex items-center gap-2">
+                                <i class="fas fa-cog w-4 text-center"></i>
+                                {{ __('Pengaturan') }}
+                            </x-dropdown-link>
+                            
+                            <div class="border-t border-gray-100"></div>
 
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+                            <!-- Authentication -->
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')"
+                                        onclick="event.preventDefault();
+                                                    this.closest('form').submit();"
+                                        class="flex items-center gap-2 text-red-600 hover:bg-red-50">
+                                    <i class="fas fa-sign-out-alt w-4 text-center"></i>
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
+                            </form>
+                        </x-slot>
+                    </x-dropdown>
+                </div>
+
+                <!-- Mobile menu button -->
+                <div class="-me-2 flex items-center sm:hidden">
+                    <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-[var(--primary)] hover:bg-gray-50 focus:outline-none focus:bg-gray-50 focus:text-[var(--primary)] transition duration-150 ease-in-out">
+                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                            <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+        <div class="pt-2 pb-3 space-y-1 bg-white">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="flex items-center gap-3">
+                <i class="fas fa-tachometer-alt w-4 text-center"></i>
                 {{ __('Dashboard') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="#services" class="flex items-center gap-3">
+                <i class="fas fa-cogs w-4 text-center"></i>
+                {{ __('Layanan') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="#history" class="flex items-center gap-3">
+                <i class="fas fa-history w-4 text-center"></i>
+                {{ __('Riwayat') }}
+            </x-responsive-nav-link>
+            <x-responsive-nav-link href="#vehicles" class="flex items-center gap-3">
+                <i class="fas fa-motorcycle w-4 text-center"></i>
+                {{ __('Kendaraan') }}
             </x-responsive-nav-link>
         </div>
 
+        <!-- Quick Actions Mobile -->
+        <div class="pt-4 pb-2 border-t border-gray-200 bg-gray-50">
+            <div class="px-4 space-y-2">
+                <a href="{{ url('/') }}" class="w-full inline-flex items-center gap-2 px-4 py-2 rounded-md border border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white transition text-sm justify-center">
+                    <i class="fas fa-home"></i> Kembali ke Beranda
+                </a>
+                <a href="https://wa.me/6281234567890" target="_blank" class="w-full inline-flex items-center gap-2 px-4 py-2 rounded-md bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] transition text-sm justify-center">
+                    <i class="fab fa-whatsapp"></i> Chat WhatsApp
+                </a>
+            </div>
+        </div>
+
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
+        <div class="pt-4 pb-1 border-t border-gray-200 bg-white">
             <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-[var(--primary)] text-white flex items-center justify-center font-semibold">
+                        {{ substr(Auth::user()->name, 0, 1) }}
+                    </div>
+                    <div>
+                        <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                        <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                    </div>
+                </div>
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('profile.edit')" class="flex items-center gap-3">
+                    <i class="fas fa-user-circle w-4 text-center"></i>
                     {{ __('Profile') }}
                 </x-responsive-nav-link>
-
+                
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                                        this.closest('form').submit();"
+                            class="flex items-center gap-3 text-red-600 hover:bg-red-50">
+                        <i class="fas fa-sign-out-alt w-4 text-center"></i>
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>
@@ -98,3 +171,21 @@
         </div>
     </div>
 </nav>
+
+<style>
+    :root{
+        --primary: #dc2626;
+        --primary-dark: #b91c1c;
+        --muted:#6b7280;
+    }
+    
+    /* Custom styling for nav links to match theme */
+    .nav-link-active {
+        color: var(--primary);
+        border-color: var(--primary);
+    }
+    
+    .nav-link-hover:hover {
+        color: var(--primary);
+    }
+</style>
