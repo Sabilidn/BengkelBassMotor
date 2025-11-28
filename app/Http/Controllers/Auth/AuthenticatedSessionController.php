@@ -23,15 +23,23 @@ class AuthenticatedSessionController extends Controller
     /**
      * Handle an incoming authentication request.
      */
-    public function store(LoginRequest $request): RedirectResponse
-    {
-        $request->authenticate();
+  public function store(LoginRequest $request)
+{
+    $request->authenticate(); // method ada di LoginRequest dari Fortify
+    $request->session()->regenerate();
 
-        $request->session()->regenerate();
+    $user = Auth::user();
 
-        return redirect()->intended(RouteServiceProvider::HOME);
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    } elseif ($user->role === 'mechanic') {
+        return redirect()->route('mechanic.dashboard');
+    } elseif ($user->role === 'customer') {
+        return redirect()->route('customer.dashboard');
     }
 
+    return redirect(RouteServiceProvider::HOME); // fallback
+}
     /**
      * Destroy an authenticated session.
      */
